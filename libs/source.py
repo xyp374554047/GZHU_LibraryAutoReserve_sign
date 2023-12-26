@@ -169,6 +169,12 @@ class ZWYT(object):
         res = self.rr.get(url=self.urls['userinfo'], cookies=self.cookies, timeout=60)
         return res.json().get('data').get('accNo')
 
+    def passwordReset(self):
+       """
+       密码重置
+       """
+       ...
+
     # 登录
     def login(self):
         """
@@ -194,6 +200,9 @@ class ZWYT(object):
         }
         url = self.urls['login_url']
         res = self.rr.post(url=url, data=data, timeout=60)
+
+        if re.findall('密码重置', res.text):
+            self.passwordReset()
 
         location = str(res.headers.get('Location'))
         ticket = re.findall('ticket=(.*)', location)[0]  # 获取ticket
